@@ -5,61 +5,75 @@ from llm_agent import Agent
 from llm_agent import Action
 
 #Set Up Available Functions
-fh = open("demo/business_ideas.txt", "r")
+fh = open("demo/tweets.txt", "r")
 
-def get_next_pitch():
+def get_next_tweet():
   next_line = fh.readline()
   if next_line == '':
     fh.close()
-    return "No More Pitches."
-  print(f"Evaulating pitch: {next_line.strip()}")
+    return "None"
+  print(f"Evaulating tweet: {next_line.strip()}")
   return next_line
 
-def accept(memo):
-  print(f"Accepted with memo: {memo}\n---")
-  return 'Saved'
+def respond(text):
+  print(f"Responded with memo: {text}\n---")
+  return 'True'
 
-def reject(note):
-  print(f"Rejected with note: {note}\n---")
-  return 'Sent'
+def flag(tweet):
+  print(f"Flagged for further discussion\n---")
+  return 'True'
+
+def save(tweet):
+  print(f"Saved as potential testimonial\n---")
+  return 'True'
 
 #Create our Agent
 agent = Agent(
   name="LOIS",
   persona="""
-LOIS is an associate at a Venture Capital firm. 
-She spends a lot of time reviewing pitches the firm receives from a variety of sources, and can quickly tell whether or not an idea merits further investigation.
+LOIS works for "FauxCo", a sustainable fashion brand that uses eco-friendly materials and ethical manufacturing practices.
+She manages FauxCo's social media, among other things, and is exceptionally good at interacting with customers.
 """.strip(),
   task="""
-LOIS's current task is to review emails with pitches the firm has received and sort them into two categories: Accepted or Rejected.
-When she rejects a pitch, she also writes a polite response to the email explaining that the firm is not interested and including a reason why. 
-When she accepts a pitch, she also writes a short memo for her manager describing why she thinks they should consider the pitch further. 
-She must do this until GET_NEXT_PITCH returns "No More Pitches".
+LOIS's current task is to review recent tweets about FauxCo".
+For most tweets, she'll respond with an appropriate comment.
+For tweets that are exceptionally positive, she will save them in a separate file as possible customer testimonials for the website.
+For tweets that are exceptionally negative, she'll flag them for further discussion with her team.
+She does this until she's reviewed all tweets.
 """.strip(),
   actions=[
     Action(
-      impl=get_next_pitch,
-      name="GET_NEXT_PITCH",
+      impl=get_next_tweet,
+      name="GET_NEXT_TWEET",
       args=[],
-      returns="The text of the next pitch in the inbox, or \"No More Pitches\" if there were no pitches remaining."
+      returns="The text of the next tweet, or \"None\" if there are no tweets remaining."
     ),
     Action(
-      impl=reject,
-      name="REJECT",
+      impl=respond,
+      name="RESPOND",
       args=[{
-        "name": "Response",
-        "desc": "The text of the polite response that LOIS wrote in the rejection email."
+        "name": "Text",
+        "desc": "The comment LOIS posts in response to the tweet"
       }],
-      returns="Sent if the message was sent, or an error if not."
+      returns="True if the comment posted, or an error if not."
     ),
     Action(
-      impl=accept,
-      name="ACCEPT",
+      impl=flag,
+      name="FLAG",
       args=[{
-        "name": "Memo",
-        "desc": "The text of the memo LOIS wrote for her manager."
+        "name": "Tweet",
+        "desc": "The text of the negative flagged tweet."
       }],
-      returns="Saved is the memo was saved, or an error if not."
+      returns="True is the tweet was flagged, or an error if not."
+    ),
+    Action(
+      impl=save,
+      name="SAVE",
+      args=[{
+        "name": "Tweet",
+        "desc": "The text of the positive saved tweet."
+      }],
+      returns="True is the tweet was saved, or an error if not."
     )
   ]
 )

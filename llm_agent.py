@@ -15,13 +15,16 @@ class Agent:
 {self.task}
 
 The following is a LOG of {self.name}'s actions as they perform this task. Log entries have the following format:
-ACTION_NAME || Argument 1 || Argument N |||
-RESPONSE || Result of the action |||
+ACTION_NAME||Argument_1_value|||
+RESPONSE||Result_of_action|||
+ACTION2_NAME||Argument_1_value||Argument_N_value|||
+RESPONSE||Result_of_action_2|||
 
-{self.name} is limit to the following actions:
+{self.name} is limited to the following actions:
 {self.action_list()}
 TASK_COMPLETED
 - Arg:Message: Text to return when the task has been completed
+- Returns: None
 
 --LOG--
 {self.log}
@@ -37,7 +40,7 @@ TASK_COMPLETED
     response = openai.Completion.create(
       model="text-davinci-003",
       prompt=self.prompt(),
-      temperature=0.7,
+      temperature=0.5,
       max_tokens=256,
       top_p=1,
       frequency_penalty=0,
