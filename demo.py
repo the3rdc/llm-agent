@@ -16,7 +16,7 @@ def get_next_tweet():
   return next_line
 
 def respond(text):
-  print(f"Responded with memo: {text}\n---")
+  print(f"Responded with tweet: {text}\n---")
   return 'True'
 
 def flag(tweet):
@@ -78,4 +78,4 @@ She does this until she's reviewed all tweets.
   ]
 )
 
-print(agent.run(max_tries=30,max_log_length=4))
+print(agent.run(max_tries=50,max_log_length=4))
