@@ -48,7 +48,7 @@ She must do this until GET_NEXT_PITCH returns "No More Pitches".
       name="REJECT",
       args=[{
         "name": "Response",
-        "desc": "The text pf the polite response that LOIS wrote in the rejection email."
+        "desc": "The text of the polite response that LOIS wrote in the rejection email."
       }],
       returns="Sent if the message was sent, or an error if not."
     ),
