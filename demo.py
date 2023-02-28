@@ -1,5 +1,5 @@
 import openai
-openai.api_key = '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'
+openai.api_key = ''
 
 from llm_agent import Agent
 from llm_agent import Action
